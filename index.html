@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>POD Automation Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ── Header ─────────────────────────────────────────────────────────── -->
+  <header>
+    <div class="header-left">
+      <h1>POD Automation</h1>
+      <span id="connection-dot" class="dot dot--disconnected" title="Disconnected"></span>
+    </div>
+    <div class="header-center">
+      <div class="stat-group">
+        <span class="stat-label">Total</span>
+        <span class="stat-value" id="stat-total">0</span>
+      </div>
+      <div class="stat-group">
+        <span class="stat-label">Ready</span>
+        <span class="stat-value" id="stat-ready">0</span>
+      </div>
+      <div class="stat-group">
+        <span class="stat-label">Complete</span>
+        <span class="stat-value" id="stat-complete">0</span>
+      </div>
+      <div class="stat-group">
+        <span class="stat-label">Failed</span>
+        <span class="stat-value stat-value--fail" id="stat-failed">0</span>
+      </div>
+    </div>
+    <div class="header-right">
+      <button id="btn-start" class="btn btn--start">▶ Start</button>
+      <button id="btn-stop" class="btn btn--stop" disabled>■ Stop</button>
+      <span id="automation-status" class="automation-status">Stopped</span>
+    </div>
+  </header>
+
+  <!-- ── Stage Toggles ──────────────────────────────────────────────────── -->
+  <div class="toggles-bar">
+    <span class="toggles-label">Stage Toggles:</span>
+    <label class="toggle-switch">
+      <input type="checkbox" id="toggle-needs-editing" data-stage="needs-editing" checked>
+      <span class="toggle-track"></span>
+      <span class="toggle-name">Editing</span>
+    </label>
+    <label class="toggle-switch">
+      <input type="checkbox" id="toggle-needs-listing" data-stage="needs-listing" checked>
+      <span class="toggle-track"></span>
+      <span class="toggle-name">Listing</span>
+    </label>
+    <label class="toggle-switch">
+      <input type="checkbox" id="toggle-ready-to-upload" data-stage="ready-to-upload" checked>
+      <span class="toggle-track"></span>
+      <span class="toggle-name">Upload</span>
+    </label>
+
+    <!-- Drop zone for uploading designs directly -->
+    <div id="drop-zone" class="drop-zone">
+      <span>Drop designs here or <label for="file-input" class="file-label">browse</label></span>
+      <input type="file" id="file-input" accept=".png,.jpg,.jpeg" multiple hidden>
+    </div>
+  </div>
+
+  <!-- ── Kanban Board ────────────────────────────────────────────────────── -->
+  <main class="board">
+
+    <div class="column" data-folder="inbox">
+      <div class="column-header">
+        <span class="column-title">Inbox</span>
+        <span class="column-count badge" id="count-inbox">0</span>
+      </div>
+      <div class="column-cards" id="cards-inbox"></div>
+    </div>
+
+    <div class="column" data-folder="needs-editing">
+      <div class="column-header">
+        <span class="column-title">Needs Editing</span>
+        <span class="column-count badge" id="count-needs-editing">0</span>
+      </div>
+      <div class="column-cards" id="cards-needs-editing"></div>
+    </div>
+
+    <div class="column" data-folder="needs-listing">
+      <div class="column-header">
+        <span class="column-title">Needs Listing</span>
+        <span class="column-count badge" id="count-needs-listing">0</span>
+      </div>
+      <div class="column-cards" id="cards-needs-listing"></div>
+    </div>
+
+    <div class="column" data-folder="ready-to-upload">
+      <div class="column-header">
+        <span class="column-title">Ready to Upload</span>
+        <span class="column-count badge" id="count-ready-to-upload">0</span>
+      </div>
+      <div class="column-cards" id="cards-ready-to-upload"></div>
+    </div>
+
+    <div class="column column--active" data-folder="uploading">
+      <div class="column-header">
+        <span class="column-title">Uploading</span>
+        <span class="column-count badge" id="count-uploading">0</span>
+      </div>
+      <div class="column-cards" id="cards-uploading"></div>
+    </div>
+
+    <div class="column column--success" data-folder="complete">
+      <div class="column-header">
+        <span class="column-title">Complete</span>
+        <span class="column-count badge" id="count-complete">0</span>
+      </div>
+      <div class="column-cards" id="cards-complete"></div>
+    </div>
+
+    <div class="column column--fail" data-folder="failed">
+      <div class="column-header">
+        <span class="column-title">Failed</span>
+        <span class="column-count badge badge--fail" id="count-failed">0</span>
+      </div>
+      <div class="column-cards" id="cards-failed"></div>
+    </div>
+
+  </main>
+
+  <!-- ── Context Menu ────────────────────────────────────────────────────── -->
+  <div id="context-menu" class="context-menu hidden">
+    <div class="context-menu-title" id="ctx-filename"></div>
+    <button class="ctx-btn" id="ctx-move-inbox">Move to Inbox</button>
+    <button class="ctx-btn" id="ctx-move-editing">Move to Needs Editing</button>
+    <button class="ctx-btn" id="ctx-move-listing">Move to Needs Listing</button>
+    <button class="ctx-btn" id="ctx-move-ready">Move to Ready to Upload</button>
+    <button class="ctx-btn" id="ctx-retry">Retry (→ Inbox)</button>
+    <hr class="ctx-divider">
+    <button class="ctx-btn ctx-btn--danger" id="ctx-remove">Remove from Pipeline</button>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
