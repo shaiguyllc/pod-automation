@@ -385,23 +385,32 @@ h1 {
 
 /* ── Mobile ───────────────────────────────────────────────────────────────── */
 @media (max-width: 768px) {
-  html, body { height: auto; overflow: auto; }
+  html, body {
+    height: auto !important;
+    min-height: 100vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
 
-  /* Header: stack to two lines */
+  /* Header: auto height, wrap content */
   header {
-    height: auto;
+    position: relative !important;
+    height: auto !important;
     flex-wrap: wrap;
     padding: 10px 12px;
     gap: 8px;
+    width: 100%;
+    box-sizing: border-box;
   }
   .header-left { min-width: 0; flex: 1; }
   h1 { font-size: 14px; }
   .header-center {
     order: 3;
     width: 100%;
-    gap: 12px;
+    gap: 10px;
     padding: 4px 0 2px;
     flex-wrap: wrap;
+    justify-content: flex-start;
   }
   .stat-group { flex-direction: row; gap: 6px; align-items: baseline; }
   .stat-label { font-size: 11px; }
@@ -409,38 +418,55 @@ h1 {
   .header-right { gap: 6px; }
   .btn { padding: 5px 10px; font-size: 12px; }
 
-  /* Toggles bar: wrap */
+  /* Toggles bar: relative, wrap */
   .toggles-bar {
-    position: relative;
-    top: auto;
-    height: auto;
+    position: relative !important;
+    top: auto !important;
+    height: auto !important;
     flex-wrap: wrap;
     padding: 8px 12px;
-    gap: 10px;
+    gap: 8px;
+    width: 100%;
+    box-sizing: border-box;
   }
+  .toggles-label { width: 100%; }
   .drop-zone { margin-left: 0; width: 100%; text-align: center; }
 
-  /* Board: vertical stack instead of horizontal scroll */
+  /* Board: full-width vertical stack, normal document flow */
   .board {
-    position: relative;
-    top: auto;
-    left: auto; right: auto; bottom: auto;
-    flex-direction: column;
-    overflow: visible;
-    padding: 10px;
-    gap: 8px;
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: visible !important;
+    overflow-x: hidden !important;
+    width: 100% !important;
+    box-sizing: border-box;
+    padding: 10px 12px;
+    gap: 10px;
   }
 
-  /* Columns: full width, fixed height with internal scroll */
+  /* Columns: full width, compact height with scroll */
   .column {
-    min-width: 0;
-    max-width: 100%;
-    width: 100%;
-    max-height: 260px;
+    flex: none !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    box-sizing: border-box;
+    max-height: none !important;
   }
-  .column-cards { max-height: 180px; }
+  .column-cards {
+    max-height: 200px;
+    overflow-y: auto;
+  }
 
   /* Cards */
   .card { padding: 8px 10px; }
-  .card-name { font-size: 13px; white-space: normal; }
+  .card-name { font-size: 13px; white-space: normal; word-break: break-word; }
+
+  /* Context menu: keep on screen */
+  .context-menu { max-width: calc(100vw - 24px); }
 }
